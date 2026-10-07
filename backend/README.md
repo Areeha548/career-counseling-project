@@ -73,3 +73,17 @@ The `career_recommendations` table stores one current score and rank for each `(
 ## Browser origins and CORS
 
 The Vite development server proxies API calls locally. For a separate frontend origin (for example, a production deployment), list its exact origin in `FRONTEND_ORIGINS` in `backend/.env`, separated by commas. Do not include URL paths in this list. Local Vite and preview origins are allowed by default. SQLite foreign-key enforcement is enabled on each database connection.
+
+## User skill profiles and career skill gaps
+
+Users can save their current skills from the shared catalog with a proficiency level: `0` Not familiar, `1` Beginner, `2` Intermediate, or `3` Advanced. The profile belongs to the authenticated account and can be replaced or updated without creating duplicate skill rows.
+
+The existing `career_skills` association stores each career's skill-specific priority and target level. The catalog lists the most central skills first: the first three are high priority (target Advanced), the next three are medium priority (target Intermediate), and remaining skills are low priority (target Beginner). This ordering is seeded idempotently and stays attached to the existing career-skill relationship.
+
+The skill gap endpoint classifies a required skill as Strong when the user's level meets its target, Developing when they report a nonzero level below target, and Gap when they have no level. Readiness is the priority-weighted average of `min(user level, target level) / target level`, expressed as a percentage. It is an internal comparison metric, not a guarantee of job readiness.
+
+Protected endpoints:
+
+- `GET /api/skills/me` — read the signed-in user's profile.
+- `PUT /api/skills/me` — replace the profile with catalog skill IDs and proficiency levels. Send `{ "skills": [] }` to clear it.
+- `GET /api/careers/{career_id}/skill-gap` — compare that user's profile with a career's existing required skills.

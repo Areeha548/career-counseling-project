@@ -25,16 +25,21 @@ function MatchCard({ recommendation }) {
         <span className="recommendation-skills-label">RELATED SKILLS</span>
         <div>{recommendation.skills.slice(0, 7).map((skill) => <span key={skill}>{skill}</span>)}</div>
       </div>
-      <button
-        type="button"
-        className="recommendation-details-toggle"
-        aria-expanded={showDetails}
-        aria-controls={`career-details-${recommendation.career_id}`}
-        onClick={() => setShowDetails((visible) => !visible)}
-      >
-        {showDetails ? 'Hide Career Details' : 'View Career Details'}
-        <span aria-hidden="true">{showDetails ? '−' : '+'}</span>
-      </button>
+      <div className="recommendation-card-actions">
+        <button
+          type="button"
+          className="recommendation-details-toggle"
+          aria-expanded={showDetails}
+          aria-controls={`career-details-${recommendation.career_id}`}
+          onClick={() => setShowDetails((visible) => !visible)}
+        >
+          {showDetails ? 'Hide Career Details' : 'View Career Details'}
+          <span aria-hidden="true">{showDetails ? '−' : '+'}</span>
+        </button>
+        <Link className="recommendation-skill-gap-link" to={`/careers/${recommendation.career_id}/skill-gap`}>
+          Explore Career <span aria-hidden="true">→</span>
+        </Link>
+      </div>
       {showDetails && (
         <div className="recommendation-details" id={`career-details-${recommendation.career_id}`}>
           <p>{recommendation.description}</p>

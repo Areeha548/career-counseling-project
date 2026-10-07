@@ -10,7 +10,9 @@ from . import models
 from .auth import router as auth_router
 from .assessment import router as assessment_router
 from .recommendations import router as recommendations_router
-from .database import Base, SessionLocal, engine, get_db
+from .skill_gap import router as skill_gap_router
+from .skill_profiles import router as skill_profiles_router
+from .database import Base, SessionLocal, engine, ensure_career_skill_metadata, get_db
 from .schemas import CareerDetail, CareerRead, SkillRead
 from .seed import seed_data
 
@@ -19,6 +21,7 @@ from .seed import seed_data
 async def lifespan(app: FastAPI):
     """Create database tables and seed starter data when the API starts."""
     Base.metadata.create_all(bind=engine)
+    ensure_career_skill_metadata()
     with SessionLocal() as database:
         seed_data(database)
     yield
@@ -33,12 +36,14 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[origin.strip() for origin in configured_origins.split(",") if origin.strip()],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["GET", "POST", "PUT", "OPTIONS"],
     allow_headers=["Accept", "Authorization", "Content-Type"],
 )
 app.include_router(auth_router)
 app.include_router(assessment_router)
 app.include_router(recommendations_router)
+app.include_router(skill_profiles_router)
+app.include_router(skill_gap_router)
 
 
 @app.get("/api/health")

@@ -1,8 +1,17 @@
-﻿from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from .catalog import CAREER_DATA, SKILL_DATA
-from .models import Career, Skill
+from .models import Career, Skill, career_skills
+
+
+def career_skill_priority(position: int) -> tuple[str, int]:
+    """Use the catalog order to store career-specific skill importance."""
+    if position < 3:
+        return "high", 3
+    if position < 6:
+        return "medium", 2
+    return "low", 1
 
 
 def seed_data(database: Session) -> None:
@@ -44,5 +53,19 @@ def seed_data(database: Session) -> None:
         career.category = category
         career.difficulty_level = difficulty
         career.skills = [skills_by_name[skill_name] for skill_name in career_skill_names]
+        database.flush()
+
+        # CAREER_DATA keeps required skills in curated relevance order. Persist
+        # that career-specific priority on the existing career_skills rows.
+        for position, skill_name in enumerate(career_skill_names):
+            priority, target_level = career_skill_priority(position)
+            database.execute(
+                update(career_skills)
+                .where(
+                    career_skills.c.career_id == career.id,
+                    career_skills.c.skill_id == skills_by_name[skill_name].id,
+                )
+                .values(priority=priority, target_level=target_level)
+            )
 
     database.commit()

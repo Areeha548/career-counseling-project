@@ -1,6 +1,6 @@
 ﻿from datetime import datetime, timezone
 
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Table, Text, UniqueConstraint
+from sqlalchemy import CheckConstraint, Column, DateTime, ForeignKey, Integer, String, Table, Text, UniqueConstraint, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .database import Base
@@ -10,6 +10,8 @@ career_skills = Table(
     Base.metadata,
     Column("career_id", ForeignKey("careers.id"), primary_key=True),
     Column("skill_id", ForeignKey("skills.id"), primary_key=True),
+    Column("priority", String(12), nullable=False, server_default=text("'medium'")),
+    Column("target_level", Integer, nullable=False, server_default=text("2")),
 )
 
 
@@ -53,6 +55,10 @@ class Skill(Base):
         secondary=career_skills,
         back_populates="skills",
     )
+    user_profiles: Mapped[list["UserSkill"]] = relationship(
+        back_populates="skill",
+        cascade="all, delete-orphan",
+    )
 
 
 class User(Base):
@@ -80,6 +86,28 @@ class User(Base):
         back_populates="user",
         cascade="all, delete-orphan",
     )
+    skill_profiles: Mapped[list["UserSkill"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+
+
+class UserSkill(Base):
+    """A user's self-reported proficiency for one catalog skill."""
+
+    __tablename__ = "user_skills"
+    __table_args__ = (
+        UniqueConstraint("user_id", "skill_id", name="uq_user_skill_profile"),
+        CheckConstraint("proficiency_level >= 0 AND proficiency_level <= 3", name="ck_user_skill_level"),
+    )
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    skill_id: Mapped[int] = mapped_column(ForeignKey("skills.id", ondelete="CASCADE"), nullable=False, index=True)
+    proficiency_level: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    user: Mapped["User"] = relationship(back_populates="skill_profiles")
+    skill: Mapped[Skill] = relationship(back_populates="user_profiles")
 
 
 class AssessmentResponse(Base):

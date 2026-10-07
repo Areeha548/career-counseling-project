@@ -1,6 +1,7 @@
 ﻿from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+from typing import Literal
 
 
 class SkillRead(BaseModel):
@@ -138,3 +139,56 @@ class RecommendationsResponse(BaseModel):
     message: str
     generated_at: datetime | None = None
     recommendations: list[CareerRecommendationRead] = Field(default_factory=list)
+
+
+class UserSkillInput(BaseModel):
+    skill_id: int = Field(ge=1)
+    proficiency_level: int = Field(ge=0, le=3)
+
+
+class UserSkillProfileUpdate(BaseModel):
+    skills: list[UserSkillInput] = Field(default_factory=list, max_length=120)
+
+    @field_validator("skills")
+    @classmethod
+    def skill_ids_must_be_unique(cls, skills: list[UserSkillInput]) -> list[UserSkillInput]:
+        skill_ids = [item.skill_id for item in skills]
+        if len(skill_ids) != len(set(skill_ids)):
+            raise ValueError("A skill can only appear once in your profile.")
+        return skills
+
+
+class UserSkillRead(BaseModel):
+    skill_id: int
+    name: str
+    description: str
+    category: str
+    proficiency_level: int
+
+
+class UserSkillProfileResponse(BaseModel):
+    skills: list[UserSkillRead]
+    count: int
+
+
+class CareerSkillGapItem(BaseModel):
+    skill_id: int
+    name: str
+    category: str
+    proficiency_level: int
+    proficiency_label: str
+    target_level: int
+    target_label: str
+    priority: Literal["high", "medium", "low"]
+    status: Literal["strong", "developing", "gap"]
+
+
+class CareerSkillGapResponse(BaseModel):
+    career: CareerRead
+    total_required: int
+    strong_count: int
+    developing_count: int
+    gap_count: int
+    readiness_percent: float
+    readiness_note: str
+    skills: list[CareerSkillGapItem]

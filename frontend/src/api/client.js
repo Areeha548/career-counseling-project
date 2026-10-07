@@ -76,3 +76,19 @@ export function submitAssessment(answers, token) {
 export function getRecommendations(token) {
   return apiRequest('/api/recommendations', { token })
 }
+
+export function getSkillCatalog() {
+  return apiRequest('/api/skills')
+}
+
+export function getMySkillProfile(token) {
+  return apiRequest('/api/skills/me', { token })
+}
+
+export function saveMySkillProfile(skills, token) {
+  return apiRequest('/api/skills/me', { method: 'PUT', body: { skills }, token })
+}
+
+export function getCareerSkillGap(careerId, token) {
+  return apiRequest(`/api/careers/${careerId}/skill-gap`, { token })
+}
