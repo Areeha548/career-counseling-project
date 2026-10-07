@@ -1,16 +1,28 @@
-# React + Vite
+# AI Career Mentor Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React and Vite frontend for the Career Counseling Project.
 
-Currently, two official plugins are available:
+## Run locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+From this directory, install dependencies once, copy `.env.example` to `.env.local`, and start Vite:
 
-## React Compiler
+```powershell
+npm install
+Copy-Item .env.example .env.local
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Start FastAPI separately from `backend/`. During development, Vite proxies `/api` requests to `VITE_API_BASE_URL`. Production builds call that configured API origin directly, so the backend must allow the deployed frontend origin in `FRONTEND_ORIGINS`.
 
-## Expanding the Oxlint configuration
+Build for production with `npm run build`.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Routes
+
+- `/` - landing page.
+- `/register` - create an account.
+- `/login` - sign in.
+- `/dashboard` - protected user dashboard with assessment and recommendation links.
+- `/assessment` - protected 20-question assessment; retakes update saved responses.
+- `/recommendations` - protected top 10 career matches with scores, explanations, skills, and expandable career details.
+
+The bearer token is kept in `sessionStorage` for the current tab session and removed on logout. The assessment and recommendations use authenticated FastAPI endpoints; no recommendation mock data is used in the signed-in results page.
