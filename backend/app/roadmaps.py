@@ -1,6 +1,7 @@
 """Protected API for creating and tracking personalized career roadmaps."""
 
 from datetime import datetime, timezone
+from math import ceil
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
@@ -192,6 +193,7 @@ def create_or_resume_roadmap(
             proficiency_level_at_creation=gap_item.proficiency_level if gap_item else None,
             priority_at_creation=gap_item.priority if gap_item else None,
             target_level_at_creation=gap_item.target_level if gap_item else None,
+            estimated_minutes_at_creation=_personalized_estimate(step.estimated_minutes, gap_item),
         ))
     database.add(roadmap)
     try:
@@ -222,6 +224,17 @@ def _personalization_key(step: RoadmapStepTemplate, gap_by_skill: dict):
     )
 
 
+def _personalized_estimate(base_minutes: int, gap_item) -> int:
+    """Give a beginner more practice time and keep estimates frozen per roadmap."""
+    if gap_item is None:
+        return base_minutes
+    if gap_item.status == "strong":
+        return max(30, ceil(base_minutes * 0.35))
+    if gap_item.status == "developing":
+        return max(30, ceil(base_minutes * (1.2 if gap_item.proficiency_level == 1 else 0.8)))
+    return ceil(base_minutes * 1.35)
+
+
 def _detail(roadmap: UserRoadmap) -> UserRoadmapDetail:
     # The role-specific priority/target were captured at roadmap creation in
     # each step's progress row; expose those stable values with its instructions.
@@ -245,6 +258,11 @@ def _detail(roadmap: UserRoadmap) -> UserRoadmapDetail:
                 title=step.title,
                 instructions=step.instructions,
                 completion_criteria=step.completion_criteria,
+                prerequisites=step.prerequisites,
+                estimated_minutes=(
+                    row.estimated_minutes_at_creation
+                    if roadmap.template.version >= 3 else None
+                ),
                 skill_id=step.skill_id,
                 skill_name=step.skill.name if step.skill else None,
                 proficiency_level_at_creation=row.proficiency_level_at_creation,
@@ -256,6 +274,7 @@ def _detail(roadmap: UserRoadmap) -> UserRoadmapDetail:
                 completed_at=row.completed_at,
                 resource_title=step.resource_title,
                 resource_url=step.resource_url,
+                resource_search=step.resource_search,
             ))
         phases.append(RoadmapPhaseRead(
             id=phase.id,

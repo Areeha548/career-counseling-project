@@ -17,9 +17,12 @@ function StepCard({ step, isBusy, onUpdate }) {
       <div className="roadmap-step-content">
         <div className="roadmap-step-heading"><div><span className="roadmap-step-state">{step.is_optional ? 'OPTIONAL REVIEW' : step.status.replace('_', ' ').toUpperCase()}</span><h4>{step.title}</h4></div>{step.skill_name && <span className="roadmap-skill-chip">{step.skill_name}</span>}</div>
         {step.skill_name && <p className="roadmap-step-level">Your level when this plan was created: <b>{LEVEL_LABELS[step.proficiency_level_at_creation ?? 0]}</b>{step.target_level ? ` · target: ${LEVEL_LABELS[step.target_level]}` : ''}{step.priority ? ` · ${step.priority} priority` : ''}</p>}
+        {step.estimated_minutes != null && <p className="roadmap-step-time">Estimated time: {step.estimated_minutes >= 60 ? `${Math.round(step.estimated_minutes / 60 * 10) / 10} hours` : `${step.estimated_minutes} minutes`}</p>}
+        {step.prerequisites && <p className="roadmap-step-prerequisite"><b>Prerequisite:</b> {step.prerequisites}</p>}
         <p>{step.instructions}</p>
         <div className="roadmap-completion-criteria"><span>DONE WHEN</span><p>{step.completion_criteria}</p></div>
         {step.resource_url && <a className="roadmap-resource-link" href={step.resource_url} target="_blank" rel="noreferrer">{step.resource_title || 'Open learning resource'} <span aria-hidden="true">↗</span></a>}
+        {!step.resource_url && step.resource_search && <p className="roadmap-resource-search"><b>Resource search suggestion:</b> {step.resource_search}</p>}
         <div className="roadmap-step-actions">
           {step.status === 'not_started' && <button type="button" onClick={() => onUpdate(step.id, 'in_progress')} disabled={isBusy}>Start this step</button>}
           {step.status === 'in_progress' && <><button type="button" className="roadmap-step-complete" onClick={() => onUpdate(step.id, 'completed')} disabled={isBusy}>Mark complete</button><button type="button" className="roadmap-step-secondary" onClick={() => onUpdate(step.id, 'not_started')} disabled={isBusy}>Reset</button></>}

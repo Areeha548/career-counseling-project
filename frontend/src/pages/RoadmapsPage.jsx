@@ -105,11 +105,11 @@ export default function RoadmapsPage() {
               <div className="roadmap-picker-copy">
                 <span className="roadmap-overline">START OR RESUME</span>
                 <h2 id="roadmap-picker-heading">Choose a career path</h2>
-                <p>We currently have curated plans for eight careers. You can choose one without taking the assessment first.</p>
+                <p>Choose from all careers in our catalog. Every career has an ordered plan based on its real skill requirements; an assessment is not required.</p>
                 <form className="roadmap-picker-form" onSubmit={startRoadmap}>
                   <label htmlFor="roadmap-career-select">Career</label>
                   <select id="roadmap-career-select" value={selectedCareerId} onChange={(event) => setSelectedCareerId(event.target.value)} required>
-                    <option value="" disabled>Select a career with a roadmap</option>
+                    <option value="" disabled>Select a career</option>
                     {sortedCareers.map((career) => {
                       const template = templateByCareer.get(career.id)
                       return <option key={career.id} value={career.id} disabled={!template}>{career.name}{template ? '' : ' — roadmap coming soon'}</option>

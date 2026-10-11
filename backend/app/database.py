@@ -41,6 +41,29 @@ def ensure_career_skill_metadata() -> None:
             )
 
 
+def ensure_roadmap_step_metadata() -> None:
+    """Add optional roadmap guidance columns without rebuilding existing tables."""
+    inspector = inspect(engine)
+    template_columns = {column["name"] for column in inspector.get_columns("roadmap_step_templates")}
+    progress_columns = {column["name"] for column in inspector.get_columns("user_roadmap_step_progress")}
+    with engine.begin() as connection:
+        additions = {
+            "resource_search": "VARCHAR(300)",
+            "prerequisites": "TEXT",
+            "estimated_minutes": "INTEGER NOT NULL DEFAULT 60",
+        }
+        for name, column_type in additions.items():
+            if name not in template_columns:
+                connection.exec_driver_sql(
+                    f"ALTER TABLE roadmap_step_templates ADD COLUMN {name} {column_type}"
+                )
+        if "estimated_minutes_at_creation" not in progress_columns:
+            connection.exec_driver_sql(
+                "ALTER TABLE user_roadmap_step_progress "
+                "ADD COLUMN estimated_minutes_at_creation INTEGER NOT NULL DEFAULT 60"
+            )
+
+
 def get_db():
     """Provide a database session and close it after the request."""
     database = SessionLocal()

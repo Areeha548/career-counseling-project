@@ -219,6 +219,8 @@ class RoadmapStepRead(BaseModel):
     title: str
     instructions: str
     completion_criteria: str
+    prerequisites: str | None
+    estimated_minutes: int | None
     skill_id: int | None
     skill_name: str | None
     proficiency_level_at_creation: int | None
@@ -230,6 +232,7 @@ class RoadmapStepRead(BaseModel):
     completed_at: datetime | None
     resource_title: str | None
     resource_url: str | None
+    resource_search: str | None
 
 
 class RoadmapPhaseRead(BaseModel):

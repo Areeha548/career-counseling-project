@@ -13,10 +13,10 @@ from .recommendations import router as recommendations_router
 from .skill_gap import router as skill_gap_router
 from .skill_profiles import router as skill_profiles_router
 from .roadmaps import router as roadmaps_router
-from .database import Base, SessionLocal, engine, ensure_career_skill_metadata, get_db
+from .database import Base, SessionLocal, engine, ensure_career_skill_metadata, ensure_roadmap_step_metadata, get_db
 from .schemas import CareerDetail, CareerRead, SkillRead
 from .seed import seed_data
-from .roadmap_seed import seed_roadmap_templates
+from .roadmap_seed import seed_roadmap_catalog, seed_roadmap_templates
 
 
 @asynccontextmanager
@@ -24,9 +24,11 @@ async def lifespan(app: FastAPI):
     """Create database tables and seed starter data when the API starts."""
     Base.metadata.create_all(bind=engine)
     ensure_career_skill_metadata()
+    ensure_roadmap_step_metadata()
     with SessionLocal() as database:
         seed_data(database)
         seed_roadmap_templates(database)
+        seed_roadmap_catalog(database)
     yield
 
 

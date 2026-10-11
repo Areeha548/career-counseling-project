@@ -218,6 +218,9 @@ class RoadmapStepTemplate(Base):
     completion_criteria: Mapped[str] = mapped_column(Text, nullable=False)
     resource_title: Mapped[str | None] = mapped_column(String(180), nullable=True)
     resource_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    resource_search: Mapped[str | None] = mapped_column(String(300), nullable=True)
+    prerequisites: Mapped[str | None] = mapped_column(Text, nullable=True)
+    estimated_minutes: Mapped[int] = mapped_column(Integer, nullable=False, default=60, server_default="60")
 
     phase: Mapped[RoadmapPhaseTemplate] = relationship(back_populates="steps")
     skill: Mapped[Skill | None] = relationship()
@@ -272,6 +275,7 @@ class UserRoadmapStepProgress(Base):
     proficiency_level_at_creation: Mapped[int | None] = mapped_column(Integer, nullable=True)
     priority_at_creation: Mapped[str | None] = mapped_column(String(12), nullable=True)
     target_level_at_creation: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    estimated_minutes_at_creation: Mapped[int] = mapped_column(Integer, nullable=False, default=60, server_default="60")
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="not_started", server_default="not_started")
     started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
