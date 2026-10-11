@@ -117,7 +117,7 @@ export default function DashboardPage() {
           <div className="journey-preview-grid">
             <article className="journey-preview-card journey-assessment-card"><span className="journey-number">01</span><span className="journey-icon">⌕</span><h3>Discover your strengths</h3><p>Find the interests and abilities that make your path your own.</p><Link to="/assessment" className="journey-action">Start or retake assessment <span aria-hidden="true">→</span></Link></article>
             <article className="journey-preview-card"><span className="journey-number">02</span><span className="journey-icon">↗</span><h3>Explore career paths</h3><p>Review your assessment-based matches and explore promising roles.</p>{hasRecommendations ? <Link to="/recommendations" className="journey-action">View career matches <span aria-hidden="true">→</span></Link> : <span className="journey-status">Complete your assessment first</span>}</article>
-            <article className="journey-preview-card"><span className="journey-number">03</span><span className="journey-icon">✳</span><h3>Plan your next steps</h3><p>Turn your direction into practical, achievable progress.</p><span className="journey-status">Coming soon</span></article>
+            <article className="journey-preview-card"><span className="journey-number">03</span><span className="journey-icon">✳</span><h3>Plan your next steps</h3><p>Turn a career choice into practical learning phases and saved progress.</p><Link to="/roadmaps" className="journey-action">Explore career roadmaps <span aria-hidden="true">→</span></Link></article>
           </div>
         </section>
       </main>

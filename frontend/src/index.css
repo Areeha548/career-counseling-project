@@ -661,6 +661,84 @@ h1, h2, h3, p { margin-top: 0; }
   .skill-search-results { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
+/* Personalized career roadmap */
+.roadmaps-page { min-height: 100vh; background: #f7faf8; }
+.roadmaps-main, .roadmap-detail-main { width: min(1050px, calc(100% - 48px)); margin: 0 auto; padding: 38px 0 68px; }
+.roadmaps-hero { max-width: 760px; margin: 0 auto 27px; text-align: center; }
+.roadmaps-hero h1, .roadmap-detail-hero h1 { margin: 11px 0 10px; color: #213e35; font-size: clamp(34px, 5vw, 46px); line-height: 1.12; letter-spacing: -1.8px; }
+.roadmaps-hero h1 em, .roadmap-detail-hero h1 em { color: #16806f; font-family: Georgia, serif; font-weight: 500; }
+.roadmaps-hero > p { max-width: 670px; margin: 0 auto; color: #718078; font-size: 15px; line-height: 1.75; }
+.roadmap-picker-card { position: relative; display: grid; grid-template-columns: minmax(180px, .66fr) 1.34fr; gap: 24px; overflow: hidden; margin: 28px 0 42px; padding: 30px; border: 1px solid #dcebe3; border-radius: 18px; background: linear-gradient(118deg, #eef8f3 0%, #fff 75%); box-shadow: 0 17px 42px rgba(34,75,57,.07); }
+.roadmap-picker-art { position: relative; display: flex; min-height: 265px; align-items: center; justify-content: center; overflow: hidden; border: 1px solid rgba(40,128,104,.12); border-radius: 14px; background: radial-gradient(circle at 50% 48%, #fff 0, #eef8f3 68%); }
+.roadmap-picker-art::before, .roadmap-picker-art::after { position: absolute; width: 175px; height: 175px; border: 1px solid rgba(28,132,105,.12); border-radius: 50%; content: ''; }
+.roadmap-picker-art::after { width: 225px; height: 225px; }
+.roadmap-picker-art > span { z-index: 1; display: grid; place-items: center; width: 90px; height: 90px; border: 1px solid #cce4d7; border-radius: 26px; background: linear-gradient(145deg,#fff,#dff2e7); color: #16806f; font-size: 27px; font-weight: 750; box-shadow: 0 12px 30px rgba(34,115,88,.13); }
+.roadmap-picker-art i { position: absolute; z-index: 1; width: 12px; height: 12px; border-radius: 50%; background: #6dbb95; box-shadow: 0 0 0 6px rgba(109,187,149,.13); }
+.roadmap-picker-art i:nth-of-type(1) { top: 25%; left: 27%; }.roadmap-picker-art i:nth-of-type(2) { right: 23%; bottom: 27%; background: #e1b875; box-shadow: 0 0 0 6px rgba(225,184,117,.15); }.roadmap-picker-art i:nth-of-type(3) { right: 19%; top: 26%; width: 7px; height: 7px; }
+.roadmap-picker-copy { align-self: center; min-width: 0; }
+.roadmap-overline, .roadmap-step-state { color: #648b79; font-size: 10px; font-weight: 800; letter-spacing: 1.25px; }
+.roadmap-picker-copy h2 { margin: 8px 0; color: #2e4a3d; font-size: 26px; letter-spacing: -.7px; }
+.roadmap-picker-copy > p { margin: 0 0 18px; color: #76847c; font-size: 13px; line-height: 1.65; }
+.roadmap-picker-form { display: grid; gap: 9px; }
+.roadmap-picker-form label { color: #465c51; font-size: 12px; font-weight: 700; }
+.roadmap-picker-form select { width: 100%; min-height: 45px; padding: 0 12px; border: 1px solid #d8e6de; border-radius: 8px; background: #fff; color: #395549; font: inherit; font-size: 13px; }
+.roadmap-picker-form select:focus-visible, .roadmap-page button:focus-visible, .roadmap-picker-form button:focus-visible { outline: 3px solid rgba(35,141,120,.24); outline-offset: 2px; }
+.roadmap-selected-summary { margin: 0 0 2px; color: #78877f; font-size: 12px; line-height: 1.5; }
+.roadmap-picker-form .assessment-primary-button { justify-self: start; }
+.roadmap-picker-form .assessment-primary-button:disabled { opacity: .55; cursor: not-allowed; }
+.roadmap-inline-error { margin: 10px 0; color: #a3453a; font-size: 13px; line-height: 1.55; }
+.roadmap-state { display: flex; min-height: 230px; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: #718078; text-align: center; }
+.roadmap-state-error { padding: 30px; border: 1px solid #e3ece7; border-radius: 15px; background: #fff; }
+.roadmap-state h1, .roadmap-state h2 { margin: 0; color: #29463d; }
+.roadmap-state p { max-width: 500px; margin: 0; line-height: 1.65; }
+.roadmap-list-section { margin-top: 38px; }
+.roadmap-section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 15px; margin-bottom: 15px; }
+.roadmap-section-heading h2 { margin: 6px 0 0; color: #2e4a3d; font-size: 24px; letter-spacing: -.55px; }
+.roadmap-section-heading > span { color: #7d8a82; font-size: 12px; }
+.roadmap-empty-card { display: flex; align-items: center; gap: 14px; padding: 20px; border: 1px dashed #c9ddd0; border-radius: 13px; background: #fff; }
+.roadmap-empty-card > span { display: grid; place-items: center; width: 40px; height: 40px; flex: 0 0 40px; border-radius: 12px; background: #e8f5ec; color: #16806f; font-size: 18px; }
+.roadmap-empty-card h3 { margin: 0 0 5px; color: #365549; font-size: 15px; }.roadmap-empty-card p { margin: 0; color: #78867e; font-size: 13px; line-height: 1.55; }
+.roadmap-summary-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+.roadmap-summary-card { min-width: 0; padding: 20px; border: 1px solid #e1ebe5; border-radius: 14px; background: #fff; box-shadow: 0 9px 26px rgba(34,75,57,.045); }
+.roadmap-summary-meta { display: flex; justify-content: space-between; gap: 10px; color: #75877d; font-size: 10px; }.roadmap-summary-meta span:first-child { color: #39806b; font-weight: 750; }
+.roadmap-summary-card h3 { margin: 14px 0 5px; color: #2f4b3f; font-size: 19px; }.roadmap-summary-card > p { min-height: 20px; margin: 0 0 15px; color: #77867d; font-size: 12px; }
+.roadmap-meter { height: 8px; overflow: hidden; border-radius: 99px; background: #eaf1ed; }.roadmap-meter > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg,#68bd96,#178575); transition: width .25s ease; }
+.roadmap-summary-progress { display: flex; align-items: baseline; justify-content: space-between; gap: 9px; margin-top: 9px; color: #829087; font-size: 11px; }.roadmap-summary-progress b { color: #23806b; font-size: 14px; }
+.roadmap-card-link { display: inline-flex; align-items: center; gap: 7px; margin-top: 17px; color: #277b68; font-size: 12px; font-weight: 750; }.roadmap-card-link:hover, .roadmap-bottom-links > a:first-child:hover { color: #145d50; text-decoration: underline; text-underline-offset: 3px; }
+.roadmap-metric-note { margin: 25px 0 0; color: #86928b; font-size: 11px; line-height: 1.55; text-align: center; }
+.roadmap-detail-main { max-width: 920px; padding-top: 25px; }
+.roadmap-back-link { display: inline-flex; margin-bottom: 17px; color: #4b8271; font-size: 13px; font-weight: 700; }.roadmap-back-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.roadmap-detail-hero { padding: 30px; border: 1px solid #dcebe3; border-radius: 18px; background: linear-gradient(120deg,#eff8f3,#fff 76%); box-shadow: 0 14px 36px rgba(34,75,57,.055); }
+.roadmap-detail-hero h1 { max-width: 760px; }.roadmap-career-description, .roadmap-template-summary { max-width: 740px; color: #65786e; font-size: 14px; line-height: 1.7; }.roadmap-career-description { margin-bottom: 5px; }.roadmap-template-summary { margin-bottom: 20px; }
+.roadmap-progress-card { padding: 17px 19px; border: 1px solid #e0ebe4; border-radius: 12px; background: rgba(255,255,255,.85); }
+.roadmap-progress-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 12px; }.roadmap-progress-heading > div { display: flex; align-items: baseline; gap: 12px; }.roadmap-progress-heading > div > span { color: #71877b; font-size: 9px; font-weight: 800; letter-spacing: 1px; }.roadmap-progress-heading strong { color: #16806f; font-size: 25px; }.roadmap-progress-heading > span { color: #7b8981; font-size: 11px; }.roadmap-resume-note { margin-top: 9px; color: #718078; font-size: 11px; }
+.roadmap-personalization-note { margin: 14px 0 0; padding: 12px 14px; border-left: 3px solid #84c3a0; border-radius: 0 8px 8px 0; background: rgba(237,248,241,.78); color: #61766a; font-size: 12px; line-height: 1.6; }
+.roadmap-skill-profile-cta { display: inline-flex; flex-wrap: wrap; gap: 6px; margin-top: 11px; color: #247b66; font-size: 12px; font-weight: 700; }.roadmap-skill-profile-cta:hover { text-decoration: underline; text-underline-offset: 3px; }
+.roadmap-complete-banner { display: flex; align-items: center; gap: 13px; margin-top: 20px; padding: 17px 19px; border: 1px solid #cfe5d5; border-radius: 13px; background: #f0f9f2; }.roadmap-complete-banner > span { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #d6efdd; color: #267a4b; font-size: 18px; font-weight: 800; }.roadmap-complete-banner h2 { margin: 0 0 3px; color: #32634a; font-size: 16px; }.roadmap-complete-banner p { margin: 0; color: #6c8173; font-size: 12px; line-height: 1.5; }
+.roadmap-phases { display: grid; gap: 15px; margin-top: 22px; }.roadmap-phase-card { min-width: 0; padding: 22px; border: 1px solid #e1ebe5; border-radius: 15px; background: #fff; box-shadow: 0 8px 24px rgba(34,75,57,.04); }
+.roadmap-phase-header { display: grid; grid-template-columns: 43px minmax(0,1fr) auto; align-items: center; gap: 13px; }.roadmap-phase-number { display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid #d5e9dc; border-radius: 13px; background: #eff8f2; color: #328169; font-size: 14px; font-weight: 800; }.roadmap-phase-copy > span { color: #7a9284; font-size: 9px; font-weight: 800; letter-spacing: 1.1px; }.roadmap-phase-copy h2 { margin: 3px 0; color: #304d40; font-size: 20px; letter-spacing: -.4px; }.roadmap-phase-copy p { margin: 0; color: #748379; font-size: 12px; line-height: 1.5; }.roadmap-phase-progress { display: grid; justify-items: end; gap: 4px; color: #859188; font-size: 10px; white-space: nowrap; }.roadmap-phase-progress strong { color: #2c846d; font-size: 17px; }.roadmap-phase-description { margin: 16px 0 0; padding-top: 13px; border-top: 1px solid #eef2ef; color: #79877f; font-size: 12px; line-height: 1.6; }
+.roadmap-no-steps { margin: 13px 0 0; padding: 12px 14px; border-radius: 9px; background: #f7faf8; color: #78867e; font-size: 12px; line-height: 1.55; }.roadmap-step-list { display: grid; gap: 10px; margin-top: 12px; }
+.roadmap-step-card { display: grid; grid-template-columns: 34px minmax(0,1fr); gap: 12px; padding: 15px; border: 1px solid #e8eeea; border-radius: 11px; background: #fcfdfc; }.roadmap-step-completed { border-color: #d7e9dd; background: #f8fcf9; }.roadmap-step-optional { border-style: dashed; }
+.roadmap-step-marker { display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid #dce9e1; border-radius: 10px; background: #fff; color: #6e8b7b; font-size: 10px; font-weight: 800; }.roadmap-step-completed .roadmap-step-marker { border-color: #bee0c8; background: #e5f5e9; color: #28784a; font-size: 16px; }.roadmap-step-content { min-width: 0; }.roadmap-step-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }.roadmap-step-state { font-size: 8px; }.roadmap-step-heading h4 { margin: 4px 0 0; color: #385447; font-size: 15px; line-height: 1.4; }.roadmap-skill-chip { flex: 0 0 auto; max-width: 42%; overflow: hidden; padding: 5px 8px; border: 1px solid #e1ece5; border-radius: 99px; background: #f5faf6; color: #668071; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }.roadmap-step-level { margin: 7px 0 0 !important; color: #849188 !important; font-size: 10px !important; }.roadmap-step-content > p { margin: 8px 0 0; color: #697b71; font-size: 12px; line-height: 1.65; }
+.roadmap-completion-criteria { margin-top: 10px; padding: 10px 12px; border-radius: 8px; background: #f1f7f3; }.roadmap-completion-criteria > span { color: #628273; font-size: 8px; font-weight: 800; letter-spacing: 1px; }.roadmap-completion-criteria p { margin: 4px 0 0; color: #62756a; font-size: 11px; line-height: 1.6; }
+.roadmap-resource-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; color: #287c68; font-size: 11px; font-weight: 750; }.roadmap-resource-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.roadmap-step-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 12px; }.roadmap-step-actions button { min-height: 34px; padding: 0 11px; border: 1px solid #2d8a72; border-radius: 7px; background: #2d8a72; color: #fff; font: inherit; font-size: 11px; font-weight: 700; cursor: pointer; }.roadmap-step-actions button:hover { border-color: #186e5d; background: #186e5d; }.roadmap-step-actions button:disabled { opacity: .6; cursor: wait; }.roadmap-step-actions .roadmap-step-secondary { border-color: #d8e5dd; background: #fff; color: #668071; }.roadmap-step-actions .roadmap-step-secondary:hover { background: #f3f8f4; }.roadmap-step-actions > span { color: #728177; font-size: 10px; }
+.roadmap-bottom-links { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 21px; }.roadmap-bottom-links > a:first-child { color: #4b8271; font-size: 12px; font-weight: 700; }
+.recommendation-card-actions { flex-wrap: wrap; }.recommendation-roadmap-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 34px; padding: 0 10px; border: 1px solid #d6e8dd; border-radius: 7px; background: #f4faf6; color: #267561; font-size: 10px; font-weight: 750; white-space: nowrap; }.recommendation-roadmap-link:hover { border-color: #a5ceb6; background: #edf7f0; }
+.roadmaps-page button:focus-visible, .roadmap-detail-main button:focus-visible, .roadmap-picker-form select:focus-visible, .roadmap-resource-link:focus-visible, .roadmap-card-link:focus-visible, .recommendation-roadmap-link:focus-visible { outline: 3px solid rgba(35,141,120,.25); outline-offset: 2px; }
+@media (max-width: 720px) {
+  .roadmap-picker-card { grid-template-columns: 1fr; gap: 18px; padding: 20px; }.roadmap-picker-art { min-height: 155px; }.roadmap-picker-art > span { width: 70px; height: 70px; border-radius: 21px; font-size: 21px; }.roadmap-picker-art::before { width: 130px; height: 130px; }.roadmap-picker-art::after { width: 180px; height: 180px; }
+  .roadmap-summary-grid { grid-template-columns: 1fr; }.roadmap-step-heading { flex-direction: column; }.roadmap-skill-chip { max-width: 100%; }.roadmap-phase-card { padding: 18px; }
+}
+@media (max-width: 520px) {
+  .roadmaps-main, .roadmap-detail-main { width: calc(100% - 30px); padding-top: 25px; }.roadmaps-hero { text-align: left; }.roadmaps-hero h1, .roadmap-detail-hero h1 { font-size: 34px; }.roadmaps-hero > p { font-size: 13px; }
+  .roadmap-picker-card { margin-top: 20px; padding: 15px; }.roadmap-picker-copy h2 { font-size: 22px; }.roadmap-picker-form .assessment-primary-button { width: 100%; justify-content: center; }.roadmap-section-heading { align-items: flex-start; flex-direction: column; gap: 7px; }.roadmap-section-heading h2 { font-size: 21px; }
+  .roadmap-detail-hero { padding: 20px 16px; }.roadmap-progress-card { padding: 14px 12px; }.roadmap-progress-heading { align-items: flex-start; flex-direction: column; gap: 2px; }.roadmap-progress-heading > div { justify-content: space-between; width: 100%; }.roadmap-progress-heading > span { font-size: 10px; }
+  .roadmap-phase-card { padding: 15px 12px; }.roadmap-phase-header { grid-template-columns: 36px minmax(0,1fr); gap: 9px; }.roadmap-phase-number { width: 35px; height: 35px; border-radius: 11px; font-size: 12px; }.roadmap-phase-copy h2 { font-size: 17px; }.roadmap-phase-progress { grid-column: 2; display: flex; align-items: baseline; justify-items: start; gap: 8px; }.roadmap-phase-progress strong { font-size: 14px; }
+  .roadmap-step-card { grid-template-columns: 27px minmax(0,1fr); gap: 9px; padding: 12px 9px; }.roadmap-step-marker { width: 27px; height: 27px; border-radius: 8px; font-size: 9px; }.roadmap-step-heading h4 { font-size: 14px; }.roadmap-step-content > p { font-size: 11px; }.roadmap-completion-criteria { padding: 9px; }.roadmap-bottom-links { align-items: stretch; flex-direction: column; }.roadmap-bottom-links .assessment-primary-button { align-self: flex-start; }.roadmap-empty-card { align-items: flex-start; padding: 14px; }
+  .recommendation-card-actions { align-items: stretch; flex-direction: column; }.recommendation-card-actions .recommendation-details-toggle, .recommendation-skill-gap-link, .recommendation-roadmap-link { width: 100%; justify-content: space-between; }
+}
+
 @media (max-width: 600px) {
   .skill-gap-main { width: min(100% - 32px, 520px); padding-top: 20px; }
   .skill-gap-hero { padding: 23px 19px; }

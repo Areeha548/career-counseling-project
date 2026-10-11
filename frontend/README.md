@@ -25,5 +25,7 @@ Build for production with `npm run build`.
 - `/assessment` - protected 20-question assessment; retakes update saved responses.
 - `/recommendations` - protected top 10 career matches with scores, explanations, skills, and expandable career details.
 - `/careers/:careerId/skill-gap` - protected profile editor and career-specific skill readiness comparison.
+- `/roadmaps` - protected career picker and saved roadmap list.
+- `/careers/:careerId/roadmap` - protected phased learning plan with persistent step progress.
 
 The bearer token is kept in `sessionStorage` for the current tab session and removed on logout. The assessment and recommendations use authenticated FastAPI endpoints; no recommendation mock data is used in the signed-in results page.

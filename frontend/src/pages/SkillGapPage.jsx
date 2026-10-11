@@ -4,6 +4,7 @@ import {
   ApiError,
   getCareerSkillGap,
   getMySkillProfile,
+  getRoadmapTemplates,
   getSkillCatalog,
   saveMySkillProfile,
 } from '../api/client'
@@ -28,6 +29,7 @@ export default function SkillGapPage() {
   const navigate = useNavigate()
   const { logout } = useAuth()
   const [careerGap, setCareerGap] = useState(null)
+  const [hasRoadmapTemplate, setHasRoadmapTemplate] = useState(false)
   const [catalog, setCatalog] = useState([])
   const [profile, setProfile] = useState({})
   const [search, setSearch] = useState('')
@@ -46,10 +48,12 @@ export default function SkillGapPage() {
       getCareerSkillGap(careerId, getAccessToken()),
       getSkillCatalog(),
       getMySkillProfile(getAccessToken()),
+      getRoadmapTemplates(),
     ])
-      .then(([gap, skills, savedProfile]) => {
+      .then(([gap, skills, savedProfile, templates]) => {
         if (!active) return
         setCareerGap(gap)
+        setHasRoadmapTemplate(templates.some((template) => template.career_id === Number(careerId)))
         setCatalog(skills)
         setProfile(Object.fromEntries(savedProfile.skills.map((skill) => [skill.skill_id, skill.proficiency_level])))
         setIsEditorOpen(savedProfile.count === 0)
@@ -263,7 +267,7 @@ export default function SkillGapPage() {
                 })}
               </div>
             </section>
-            <div className="skill-gap-footer-action"><Link to="/recommendations" className="assessment-back-link">Compare another career match</Link><Link to="/dashboard" className="assessment-primary-button">Back to Dashboard <span aria-hidden="true">→</span></Link></div>
+            <div className="skill-gap-footer-action"><Link to="/recommendations" className="assessment-back-link">Compare another career match</Link>{hasRoadmapTemplate ? <Link to={`/careers/${careerId}/roadmap`} className="assessment-primary-button">Build / Resume my roadmap <span aria-hidden="true">→</span></Link> : <Link to="/roadmaps" state={{ careerId: Number(careerId) }} className="assessment-primary-button">Explore available roadmaps <span aria-hidden="true">→</span></Link>}<Link to="/dashboard" className="assessment-back-link">Back to Dashboard</Link></div>
           </>
         )}
       </main>

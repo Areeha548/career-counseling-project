@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router'
-import { ApiError, getRecommendations } from '../api/client'
+import { ApiError, getRecommendations, getRoadmapTemplates } from '../api/client'
 import { Brand } from '../components/AuthComponents'
 import { getAccessToken, useAuth } from '../context/AuthContext'
 
-function MatchCard({ recommendation }) {
+function MatchCard({ recommendation, hasRoadmapTemplate }) {
   const [showDetails, setShowDetails] = useState(false)
 
   return (
@@ -39,6 +39,7 @@ function MatchCard({ recommendation }) {
         <Link className="recommendation-skill-gap-link" to={`/careers/${recommendation.career_id}/skill-gap`}>
           Explore Career <span aria-hidden="true">→</span>
         </Link>
+        {hasRoadmapTemplate && <Link className="recommendation-roadmap-link" to={`/careers/${recommendation.career_id}/roadmap`}>Build roadmap <span aria-hidden="true">→</span></Link>}
       </div>
       {showDetails && (
         <div className="recommendation-details" id={`career-details-${recommendation.career_id}`}>
@@ -57,6 +58,7 @@ export default function RecommendationsPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [assessmentMissing, setAssessmentMissing] = useState(false)
+  const [roadmapCareerIds, setRoadmapCareerIds] = useState([])
 
   useEffect(() => {
     let active = true
@@ -78,6 +80,9 @@ export default function RecommendationsPage() {
         setError(requestError.message || 'Your career matches could not be loaded. Please try again.')
       })
       .finally(() => { if (active) setIsLoading(false) })
+    getRoadmapTemplates().then((templates) => {
+      if (active) setRoadmapCareerIds(templates.map((template) => template.career_id))
+    }).catch(() => {})
     return () => {
       active = false
       document.title = previousTitle
@@ -131,7 +136,7 @@ export default function RecommendationsPage() {
           <>
             <div className="recommendations-summary"><span><b>{data.recommendations.length}</b> personalized paths</span><span>Scores reflect your assessment signals</span></div>
             <section className="recommendation-grid" aria-label="Ranked career recommendations">
-              {data.recommendations.map((recommendation) => <MatchCard key={recommendation.career_id} recommendation={recommendation} />)}
+              {data.recommendations.map((recommendation) => <MatchCard key={recommendation.career_id} recommendation={recommendation} hasRoadmapTemplate={roadmapCareerIds.includes(recommendation.career_id)} />)}
             </section>
             <div className="recommendations-bottom-actions">
               <Link to="/assessment" className="assessment-back-link">Retake assessment to refresh your matches</Link>

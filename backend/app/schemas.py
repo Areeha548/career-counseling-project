@@ -192,3 +192,79 @@ class CareerSkillGapResponse(BaseModel):
     readiness_percent: float
     readiness_note: str
     skills: list[CareerSkillGapItem]
+
+
+class RoadmapCreate(BaseModel):
+    career_id: int = Field(ge=1)
+
+
+class RoadmapTemplateRead(BaseModel):
+    career_id: int
+    career_name: str
+    category: str
+    difficulty_level: str
+    title: str
+    summary: str
+    version: int
+
+
+class RoadmapStepStatusUpdate(BaseModel):
+    status: Literal["not_started", "in_progress", "completed"]
+
+
+class RoadmapStepRead(BaseModel):
+    id: int
+    template_step_id: int
+    order: int
+    title: str
+    instructions: str
+    completion_criteria: str
+    skill_id: int | None
+    skill_name: str | None
+    proficiency_level_at_creation: int | None
+    target_level: int | None
+    priority: Literal["high", "medium", "low"] | None
+    is_optional: bool
+    status: Literal["not_started", "in_progress", "completed"]
+    started_at: datetime | None
+    completed_at: datetime | None
+    resource_title: str | None
+    resource_url: str | None
+
+
+class RoadmapPhaseRead(BaseModel):
+    id: int
+    order: int
+    title: str
+    objective: str
+    description: str
+    total_steps: int
+    completed_steps: int
+    completion_percent: int
+    steps: list[RoadmapStepRead]
+
+
+class UserRoadmapSummary(BaseModel):
+    id: int
+    career_id: int
+    career_name: str
+    category: str
+    title: str
+    template_version: int
+    status: Literal["active", "completed"]
+    total_steps: int
+    completed_steps: int
+    completion_percent: int
+    current_phase: str | None
+    skill_profile_was_empty: bool
+    created_at: datetime
+    updated_at: datetime
+    completed_at: datetime | None
+
+
+class UserRoadmapDetail(UserRoadmapSummary):
+    career_description: str
+    career_difficulty: str
+    summary: str
+    phases: list[RoadmapPhaseRead]
+    personalization_note: str

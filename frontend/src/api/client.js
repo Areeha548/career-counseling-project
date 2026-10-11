@@ -92,3 +92,35 @@ export function saveMySkillProfile(skills, token) {
 export function getCareerSkillGap(careerId, token) {
   return apiRequest(`/api/careers/${careerId}/skill-gap`, { token })
 }
+
+export function getCareerCatalog() {
+  return apiRequest('/api/careers')
+}
+
+export function getRoadmapTemplates() {
+  return apiRequest('/api/roadmaps/templates')
+}
+
+export function getMyRoadmaps(token) {
+  return apiRequest('/api/roadmaps/me', { token })
+}
+
+export function createOrResumeRoadmap(careerId, token) {
+  return apiRequest('/api/roadmaps', {
+    method: 'POST',
+    body: { career_id: Number(careerId) },
+    token,
+  })
+}
+
+export function getRoadmap(roadmapId, token) {
+  return apiRequest(`/api/roadmaps/${roadmapId}`, { token })
+}
+
+export function updateRoadmapStep(roadmapId, stepId, status, token) {
+  return apiRequest(`/api/roadmaps/${roadmapId}/steps/${stepId}`, {
+    method: 'PATCH',
+    body: { status },
+    token,
+  })
+}

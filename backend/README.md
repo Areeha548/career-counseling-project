@@ -41,7 +41,7 @@ Passwords are stored as Argon2 hashes. Login tokens are signed JWTs with the use
 
 ## Career and skill catalog
 
-The ignored SQLite file is `career_mentor.db`. On startup, SQLAlchemy ensures that `careers`, `skills`, `career_skills`, `database_checks`, `users`, `assessment_responses`, and `career_recommendations` exist, then seeds 59 career paths and 120 skills. Careers and skills share a many-to-many relationship through `career_skills`.
+The ignored SQLite file is `career_mentor.db`. On startup, SQLAlchemy ensures that `careers`, `skills`, `career_skills`, `database_checks`, `users`, `assessment_responses`, `career_recommendations`, and the roadmap tables exist, then seeds 59 career paths and 120 skills. Careers and skills share a many-to-many relationship through `career_skills`.
 
 - `GET /api/careers` — list careers.
 - `GET /api/careers/{career_id}` — career details, including associated skills.
@@ -87,3 +87,18 @@ Protected endpoints:
 - `GET /api/skills/me` — read the signed-in user's profile.
 - `PUT /api/skills/me` — replace the profile with catalog skill IDs and proficiency levels. Send `{ "skills": [] }` to clear it.
 - `GET /api/careers/{career_id}/skill-gap` — compare that user's profile with a career's existing required skills.
+
+## Personalized career roadmaps
+
+Roadmap templates reuse existing careers and skill relationships; they do not create duplicate career or skill catalog rows. The initial curated templates cover Web Developer (ID 8), Software Engineer (ID 1), Data Analyst (ID 14), AI Engineer (ID 3), Frontend Developer (ID 4), Backend Developer (ID 5), UI/UX Designer (ID 44), and Cybersecurity Analyst (ID 21). Template data is maintained in `app/roadmap_data.py` and inserted idempotently by `app/roadmap_seed.py`. Templates have versions; an existing user roadmap stays pinned to the version it started with.
+
+The new tables are `roadmap_templates`, `roadmap_phase_templates`, `roadmap_step_templates`, `user_roadmaps`, and `user_roadmap_step_progress`. A user's skill gaps and career-specific priorities set the order when a roadmap is first created. Strong skills are optional review steps. This order and the level/priority snapshot are kept stable if the user later changes their profile. Completion is derived from required step statuses rather than stored counters. Users may explicitly choose a career without completing the assessment; when no skills are saved, the roadmap starts with its foundations and explains how to add skills.
+
+User-specific roadmap endpoints require `Authorization: Bearer <access_token>`:
+
+- `GET /api/roadmaps/me` — list the current user's roadmaps and derived progress.
+- `POST /api/roadmaps` — send `{ "career_id": 8 }` to create or resume a roadmap. Repeating the request for the same account and career returns the existing roadmap.
+- `GET /api/roadmaps/{roadmap_id}` — return the roadmap's career, ordered phases and steps, criteria, optional resources, and saved statuses.
+- `PATCH /api/roadmaps/{roadmap_id}/steps/{step_id}` — send `{ "status": "in_progress" }`, `{ "status": "completed" }`, or `{ "status": "not_started" }` to update progress.
+
+`GET /api/roadmaps/templates` is public catalog data used to show which careers currently have curated templates. The initial UI lists the full career catalog and marks careers without a template as coming soon. Learning links are optional and were checked before being added; completion criteria are project-authored and are separate from the resources.

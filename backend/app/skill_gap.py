@@ -23,6 +23,11 @@ def get_career_skill_gap(
     database: Session = Depends(get_db),
 ):
     """Compare saved user proficiency against the selected career's requirements."""
+    return calculate_skill_gap(career_id, user.id, database)
+
+
+def calculate_skill_gap(career_id: int, user_id: int, database: Session) -> CareerSkillGapResponse:
+    """Shared calculation used by the skill-gap endpoint and roadmap personalization."""
     career = database.scalar(
         select(Career)
         .options(selectinload(Career.skills))
@@ -33,7 +38,7 @@ def get_career_skill_gap(
 
     saved_levels = {
         item.skill_id: item.proficiency_level
-        for item in database.scalars(select(UserSkill).where(UserSkill.user_id == user.id)).all()
+        for item in database.scalars(select(UserSkill).where(UserSkill.user_id == user_id)).all()
     }
     requirement_rows = database.execute(
         select(Skill, career_skills.c.priority, career_skills.c.target_level)

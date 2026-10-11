@@ -12,9 +12,11 @@ from .assessment import router as assessment_router
 from .recommendations import router as recommendations_router
 from .skill_gap import router as skill_gap_router
 from .skill_profiles import router as skill_profiles_router
+from .roadmaps import router as roadmaps_router
 from .database import Base, SessionLocal, engine, ensure_career_skill_metadata, get_db
 from .schemas import CareerDetail, CareerRead, SkillRead
 from .seed import seed_data
+from .roadmap_seed import seed_roadmap_templates
 
 
 @asynccontextmanager
@@ -24,6 +26,7 @@ async def lifespan(app: FastAPI):
     ensure_career_skill_metadata()
     with SessionLocal() as database:
         seed_data(database)
+        seed_roadmap_templates(database)
     yield
 
 
@@ -36,7 +39,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[origin.strip() for origin in configured_origins.split(",") if origin.strip()],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "OPTIONS"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "OPTIONS"],
     allow_headers=["Accept", "Authorization", "Content-Type"],
 )
 app.include_router(auth_router)
@@ -44,6 +47,7 @@ app.include_router(assessment_router)
 app.include_router(recommendations_router)
 app.include_router(skill_profiles_router)
 app.include_router(skill_gap_router)
+app.include_router(roadmaps_router)
 
 
 @app.get("/api/health")
